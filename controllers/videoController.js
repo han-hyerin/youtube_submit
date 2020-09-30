@@ -1,8 +1,14 @@
-import { videos } from "../db";
 import routes from "../routes";
+import Video from "../models/Video";
 
-export const home = (req, res) => {
-  res.render("Home", { pageTitle: "Home", videos });
+export const home = async (req, res) => {
+  try {
+    const videos = await Video.find({});
+    res.render("Home", { pageTitle: "Home", videos });
+  } catch (error) {
+    console.log(error);
+    res.render("Home", { pageTitle: "Home", videos: [] });
+  }
 };
 
 export const search = (req, res) => {
@@ -20,7 +26,7 @@ export const postUpload = (req, res) => {
     body: { file, title, description },
   } = req;
   // Todo: upload and save video
-  res.redirect(routes.videoDetail(11111));
+  res.redirect(routes.videoDetail(video.id));
 };
 
 export const videoDetail = (req, res) =>
